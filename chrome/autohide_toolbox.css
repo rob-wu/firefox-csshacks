@@ -12,36 +12,20 @@ See the above repository for updates as well as full license text. */
 }
 
 :root[sizemode="maximized"]{
-  --uc-toolbox-rotation: 89deg;
+  --uc-toolbox-rotation: 88.5deg;
 }
 
-/* Dummy variable to support versions 94-96, can be removed when 96 lands */
-:root{ --lwt-frame: var(--lwt-accent-color) }
-
-@media (-moz-os-version: windows-win7),(-moz-os-version: windows-win10){
-
-  :root[tabsintitlebar][sizemode="maximized"]:not([inDOMFullscreen]) > body > box{ margin-top: 8px !important; }
-
-  @media screen and (min-resolution: 1.25dppx){
-    :root[tabsintitlebar][sizemode="maximized"]:not([inDOMFullscreen]) > body > box{ margin-top: 7px !important; }
-  }
-  @media screen and (min-resolution: 1.5dppx){
-    :root[tabsintitlebar][sizemode="maximized"]:not([inDOMFullscreen]) > body > box{ margin-top: 7px !important; }
-  }
-  @media screen and (min-resolution: 2dppx){
-    :root[tabsintitlebar][sizemode="maximized"]:not([inDOMFullscreen]) > body > box{ margin-top: 6px !important; }
-    :root[tabsintitlebar][sizemode="maximized"] #navigator-toolbox{ margin-top: -1px; }
-  }
-  #navigator-toolbox:not(:-moz-lwtheme){ background-color: -moz-dialog !important; }
+@media  (-moz-platform: windows){
+  :root:not([lwtheme]) #navigator-toolbox{ background-color: -moz-dialog !important; }
 }
 
 :root[sizemode="fullscreen"],
-#navigator-toolbox[inFullscreen]{ margin-top: 0 !important; }
+:root[sizemode="fullscreen"] #navigator-toolbox{ margin-top: 0 !important; }
 
 #navigator-toolbox{
+  --browser-area-z-index-toolbox: 3;
   position: fixed !important;
-  display: block;
-  background-color: var(--lwt-frame,black) !important;
+  background-color: var(--lwt-accent-color,black) !important;
   transition: transform 82ms linear, opacity 82ms linear !important;
   transition-delay: var(--uc-autohide-toolbox-delay) !important;
   transform-origin: top;
@@ -51,10 +35,23 @@ See the above repository for updates as well as full license text. */
   z-index: 1;
   pointer-events: none;
 }
-
-
-/* #mainPopupSet:hover ~ box > toolbox, */
-/* Uncomment the above line to make toolbar visible if some popup is hovered */
+:root[sessionrestored] #urlbar[popover]{
+  pointer-events: none;
+  opacity: 0;
+  transition: transform 82ms linear var(--uc-autohide-toolbox-delay), opacity 0ms calc(var(--uc-autohide-toolbox-delay) + 82ms);
+  transform-origin: 0px calc(0px - var(--tab-min-height) - var(--tab-block-margin) * 2);
+  transform: rotateX(89.9deg);
+}
+#mainPopupSet:has(> [role="group"][panelopen]) ~ toolbox #urlbar[popover],
+#navigator-toolbox:is(:hover,:focus-within) #urlbar[popover],
+#urlbar-container > #urlbar[popover]:is([focused],[open]){
+  pointer-events: auto;
+  opacity: 1;
+  transition-delay: 33ms;
+  transform: rotateX(0deg);
+}
+#mainPopupSet:has(> [role="group"][panelopen]) ~ toolbox,
+#navigator-toolbox:has(#urlbar:is([open],[focus-within])),
 #navigator-toolbox:hover,
 #navigator-toolbox:focus-within{
   transition-delay: 33ms !important;
@@ -91,7 +88,6 @@ See the above repository for updates as well as full license text. */
 
 /* Uncomment the following for compatibility with tabs_on_bottom.css - this isn't well tested though */
 /*
-:root{ --uc-titlebar-padding: 0px !important; }
 #navigator-toolbox{ flex-direction: column; display: flex; }
 #titlebar{ order: 2 }
 */

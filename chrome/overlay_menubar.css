@@ -14,8 +14,6 @@ See the above repository for updates as well as full license text. */
 
 #toolbar-menubar[autohide="true"][inactive="true"]{ height: 0px !important; }
 
-:root[tabsintitlebar][sizemode="maximized"] #toolbar-menubar{ top: 8px; }
-
 #toolbar-menubar > spacer{ flex-grow: 1 }
 #toolbar-menubar[inactive] > .titlebar-buttonbox-container{ display: none }
 
@@ -25,15 +23,17 @@ See the above repository for updates as well as full license text. */
   color: var(--arrowpanel-color);
 }
 
-#menubar-items{ -moz-box-orient: horizontal !important; }
+#menubar-items{
+  flex-direction: row !important;
+}
 #menubar-items::after{
   content: "";
-  display: -moz-box;
+  display: flex;
   width: 30px;
   height: calc(var(--tab-min-height) +  2 * var(--tab-block-margin,0px));
   background-image: linear-gradient(to right, var(--arrowpanel-background) 30%, transparent);
 }
 
-@supports -moz-bool-pref("layout.css.osx-font-smoothing.enabled"){
+@media (-moz-gtk-csd-reversed-placement){
   #toolbar-menubar[autohide="true"]:not([inactive]) > .titlebar-buttonbox-container{ display: none }  
 }
